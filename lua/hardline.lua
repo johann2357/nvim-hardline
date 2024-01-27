@@ -5,6 +5,7 @@
 -------------------- VARIABLES -----------------------------
 local common = require('hardline.common')
 local bufferline = require('hardline.bufferline')
+local bufferline_harpoon = require('hardline.extensions.bufferline_harpoon')
 local custom_colors = require('hardline.themes.custom_colors')
 local fmt = string.format
 local M = {}
@@ -16,6 +17,7 @@ M.options = {
       exclude_terminal = false,
       show_index = false,
       separator = '|',
+      use_harpoon_marks = false,
   },
   theme = 'default',
   sections = {
@@ -172,6 +174,9 @@ function M.update_bufferline()
   local sections = {}
   local settings = M.options.bufferline_settings
   local buffers = bufferline.get_buffers(settings)
+  if settings.use_harpoon_marks then
+    buffers = bufferline_harpoon.get_buffers(settings)
+  end
   for i, buffer in ipairs(buffers) do
     table.insert(sections, bufferline.to_section(buffer, i, settings))
     if i < #buffers then
